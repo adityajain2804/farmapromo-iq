@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CausalRouteImport } from './routes/causal'
 import { Route as ScenarioRouteImport } from './routes/scenario'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CausalRoute = CausalRouteImport.update({
+  id: '/causal',
+  path: '/causal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ScenarioRoute = ScenarioRouteImport.update({
@@ -25,27 +31,31 @@ const ScenarioRoute = ScenarioRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/causal': typeof CausalRoute
   '/scenario': typeof ScenarioRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/causal': typeof CausalRoute
   '/scenario': typeof ScenarioRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/causal': typeof CausalRoute
   '/scenario': typeof ScenarioRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/scenario'
+  fullPaths: '/' | '/causal' | '/scenario'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/scenario'
-  id: '__root__' | '/' | '/scenario'
+  to: '/' | '/causal' | '/scenario'
+  id: '__root__' | '/' | '/causal' | '/scenario'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CausalRoute: typeof CausalRoute
   ScenarioRoute: typeof ScenarioRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/causal': {
+      id: '/causal'
+      path: '/causal'
+      fullPath: '/causal'
+      preLoaderRoute: typeof CausalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/scenario': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CausalRoute: CausalRoute,
   ScenarioRoute: ScenarioRoute,
 }
 export const routeTree = rootRouteImport
