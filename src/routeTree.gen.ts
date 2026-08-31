@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CampaignRouteImport } from './routes/campaign'
 import { Route as CausalRouteImport } from './routes/causal'
 import { Route as ScenarioRouteImport } from './routes/scenario'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CampaignRoute = CampaignRouteImport.update({
+  id: '/campaign',
+  path: '/campaign',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CausalRoute = CausalRouteImport.update({
@@ -31,30 +37,34 @@ const ScenarioRoute = ScenarioRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/campaign': typeof CampaignRoute
   '/causal': typeof CausalRoute
   '/scenario': typeof ScenarioRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/campaign': typeof CampaignRoute
   '/causal': typeof CausalRoute
   '/scenario': typeof ScenarioRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/campaign': typeof CampaignRoute
   '/causal': typeof CausalRoute
   '/scenario': typeof ScenarioRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/causal' | '/scenario'
+  fullPaths: '/' | '/campaign' | '/causal' | '/scenario'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/causal' | '/scenario'
-  id: '__root__' | '/' | '/causal' | '/scenario'
+  to: '/' | '/campaign' | '/causal' | '/scenario'
+  id: '__root__' | '/' | '/campaign' | '/causal' | '/scenario'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CampaignRoute: typeof CampaignRoute
   CausalRoute: typeof CausalRoute
   ScenarioRoute: typeof ScenarioRoute
 }
@@ -66,6 +76,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/campaign': {
+      id: '/campaign'
+      path: '/campaign'
+      fullPath: '/campaign'
+      preLoaderRoute: typeof CampaignRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/causal': {
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CampaignRoute: CampaignRoute,
   CausalRoute: CausalRoute,
   ScenarioRoute: ScenarioRoute,
 }
